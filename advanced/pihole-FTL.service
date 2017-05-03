@@ -20,7 +20,7 @@ RUNASUSER=pihole
 
 UGID=$(getent passwd $RUNASUSER | cut -f 3,4 -d:) || true
 
-lock_pihole-FTL() {
+lock_pihole_FTL() {
         if [ -x /usr/bin/lockfile-create ]; then
                 lockfile-create $LOCKFILE
                 lockfile-touch $LOCKFILE &
@@ -28,7 +28,7 @@ lock_pihole-FTL() {
         fi
 }
 
-unlock_pihole-FTL() {
+unlock_pihole_FTL() {
         if [ -x /usr/bin/lockfile-create ] ; then
                 kill $LOCKTOUCHPID
                 lockfile-remove $LOCKFILE

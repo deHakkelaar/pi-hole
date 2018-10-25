@@ -9,8 +9,11 @@
 # Description:       Enable service provided by pihole-FTL daemon
 ### END INIT INFO
 
-FTLUSER=pihole
+FTLBIN=/usr/bin/pihole-FTL
 PIDFILE=/var/run/pihole-FTL.pid
+
+# Check capabilities and adjust user
+getcap $FTLBIN && FTLUSER=pihole || FTLUSER=root
 
 get_pid() {
     pidof "pihole-FTL"

@@ -10,8 +10,6 @@
 ### END INIT INFO
 
 PIDFILE=/var/run/pihole-FTL.pid
-CAPABILITIES=CAP_NET_BIND_SERVICE,CAP_NET_RAW,CAP_NET_ADMIN+eip
-CAPWARNING="Warning: Starting pihole-FTL as root because setting capabilities is not supported on this system"
 
 get_pid() {
     pidof "pihole-FTL"
@@ -27,6 +25,9 @@ start() {
   if is_running; then
     echo "pihole-FTL is already running"
   else
+    FTLBIN=$(which pihole-FTL)
+    CAPABILITIES=CAP_NET_BIND_SERVICE,CAP_NET_RAW,CAP_NET_ADMIN+eip
+    CAPWARNING="Warning: Starting pihole-FTL as root because setting capabilities is not supported on this system"
     # Touch files to ensure they exist (create if non-existing, preserve if existing)
     touch /var/log/pihole-FTL.log /var/log/pihole.log
     touch /run/pihole-FTL.pid /run/pihole-FTL.port
@@ -41,7 +42,7 @@ start() {
     chown pihole:pihole /var/log/pihole-FTL.log /var/log/pihole.log
     chmod 0644 /var/log/pihole-FTL.log /run/pihole-FTL.pid /run/pihole-FTL.port /var/log/pihole.log
     echo "nameserver 127.0.0.1" | /sbin/resolvconf -a lo.piholeFTL
-    setcap $CAPABILITIES "$(which pihole-FTL)" && FTLUSER=pihole || FTLUSER=root; echo $CAPWARNING
+    setcap $CAPABILITIES $FTLBIN && FTLUSER=pihole || FTLUSER=root && echo $CAPWARNING
     su -s /bin/sh -c "/usr/bin/pihole-FTL" "$FTLUSER"
     echo
   fi

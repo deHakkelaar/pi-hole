@@ -399,6 +399,7 @@ ProcessDHCPSettings() {
 dhcp-authoritative
 dhcp-range=${DHCP_START},${DHCP_END},${leasetime}
 dhcp-option=option:router,${DHCP_ROUTER}
+dhcp-option=option:dns-server,${DHCP_DNS}
 dhcp-leasefile=/etc/pihole/dhcp.leases
 #quiet-dhcp
 " > "${dhcpconfig}"
@@ -443,10 +444,11 @@ EnableDHCP() {
     change_setting "DHCP_START" "${args[2]}"
     change_setting "DHCP_END" "${args[3]}"
     change_setting "DHCP_ROUTER" "${args[4]}"
-    change_setting "DHCP_LEASETIME" "${args[5]}"
-    change_setting "PIHOLE_DOMAIN" "${args[6]}"
-    change_setting "DHCP_IPv6" "${args[7]}"
-    change_setting "DHCP_rapid_commit" "${args[8]}"
+    change_setting "DHCP_DNS" "${args[5]}"
+    change_setting "DHCP_LEASETIME" "${args[6]}"
+    change_setting "PIHOLE_DOMAIN" "${args[7]}"
+    change_setting "DHCP_IPv6" "${args[8]}"
+    change_setting "DHCP_rapid_commit" "${args[9]}"
 
     # Remove possible old setting from file
     delete_dnsmasq_setting "dhcp-"
